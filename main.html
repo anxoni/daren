@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #7654b7;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        #top-search-container {
+            position: relative;
+            height: 8%;
+            width: 100%;
+            background-color: rgba(87, 73, 114, 0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            border-bottom: 2px solid #463c63;
+            z-index: 1000;
+        }
+
+        #search-input-top {
+            width: 40%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            background-color: #fff;
+            color: #574972;
+        }
+
+        #map-container {
+            position: relative;
+            flex: 1;
+            border: 10px solid #574972;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+
+        #bottom-tab-container {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(87, 73, 114, 1);
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1000;
+            height: 10%;
+            width: 20%;
+            transition: height 0.5s;
+            opacity: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #bottom-tab {
+            background-color: #574972;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #toggle-left-tab-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #574972;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        #toggle-left-tab-button span {
+            width: 30px;
+            height: 3px;
+            background-color: #fff;
+            display: block;
+            margin: 6px 0;
+        }
+
+        #view-button {
+            position: absolute;
+            bottom: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #574972;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        #view-button span {
+            width: 30px;
+            height: 3px;
+            background-color: #fff;
+            display: block;
+            margin: 6px 0;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        #tab-container {
+            position: absolute;
+            top: 8%;
+            left: 0;
+            background-color: rgba(87, 73, 114, 1);
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 92%;
+            width: 15%; /* Adjusted width to make it wider */
+            transition: left 0.5s;
+            opacity: 1;
+        }
+
+        #tab-container .profile-picture {
+            width: 200px; /* Adjusted size to make it 80% smaller */
+            height: 200px; /* Adjusted size to make it 80% smaller */
+            border-radius: 70%;
+            margin-bottom: 25px;
+            background: url('background.jpg') center/cover; /* Added background property */
+        }
+
+        #tab-container .profile-line {
+            width: calc(169% + 40px); /* Adjusted width and margin to extend the line */
+            height: 1px;
+            background-color: #fff;
+            margin-bottom: 100px;
+            margin-left: -126px; /* Adjusted margin-left to extend within the left tab */
+        }
+
+
+
+
+        #tab-container .tab {
+            background-color: #574972;
+            color: #fff;
+            padding: 10px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .right-tab {
+            background-color: #574972;
+            color: #fff;
+            padding: 5px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        #right-tab-container {
+            position: absolute;
+            top: 8%;
+            right: 0;
+            background-color: rgba(87, 73, 114, 1);
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 75%;
+            width: 10%;
+            transition: right 0.5s;
+            opacity: 1;
+        }
+
+        .right-tab.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div id="top-search-container">
+        <input type="text" placeholder="Search..." id="search-input-top">
+    </div>
+
+    <div id="map-container">
+        <div id="map"></div>
+    </div>
+
+    <div id="bottom-tab-container">
+        <div id="bottom-tab">Bottom Tab</div>
+    </div>
+
+    <div id="view-button" onclick="toggleBottomTab()"><span id="view-button-icon"></span></div>
+
+    <div id="tab-container" onclick="toggleTab()">
+        <div class="tab" id="tab1">Tab 1</div>
+        <div class="tab" id="tab2">Tab 2</div>
+        <div class="tab" id="tab3">Tab 3</div>
+        <div class="profile-container">
+            <img class="profile-picture" src="profile.png" alt="Profile Picture">
+            <div class="profile-line"></div>
+            <div class="horizontal-line"></div>
+        </div>
+    </div>
+
+    <div id="toggle-left-tab-button" onclick="toggleTab()"><span></span><span></span><span></span></div>
+
+    <div id="right-tab-container">
+        <div class="right-tab" id="right-tab1">Right Tab 1</div>
+        <div class="right-tab" id="right-tab2">Right Tab 2</div>
+        <div class="right-tab" id="right-tab3">Right Tab 3</div>
+    </div>
+
+    <script>
+        var map;
+        var churchCoordinates = [14.3290, 120.9360];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            map = L.map('map', {
+                center: churchCoordinates,
+                zoom: 15,
+                minZoom: 15,
+                maxBounds: L.latLngBounds(
+                    L.latLng(14.4106, 120.9190),
+                    L.latLng(14.2454, 121.0141)
+                )
+            });
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'g' || event.key === 'G') {
+                    map.setView(churchCoordinates, 15);
+                }
+            });
+        });
+
+        function toggleTab() {
+            var tabContainer = document.getElementById('tab-container');
+            if (tabContainer.style.left === '0%') {
+                tabContainer.style.left = '-20%';
+                tabContainer.style.opacity = '0';
+            } else {
+                tabContainer.style.left = '0%';
+                tabContainer.style.opacity = '1';
+            }
+        }
+
+        function toggleBottomTab() {
+            var bottomTabContainer = document.getElementById('bottom-tab-container');
+            var viewButtonIcon = document.getElementById('view-button-icon');
+
+            if (bottomTabContainer.style.height === '5%') {
+                bottomTabContainer.style.height = '15%';
+                bottomTabContainer.style.opacity = '1';
+                viewButtonIcon.style.transform = 'rotate(180deg)';
+            } else {
+                bottomTabContainer.style.height = '5%';
+                bottomTabContainer.style.opacity = '0';
+                viewButtonIcon.style.transform = 'rotate(0deg)';
+            }
+
+            var viewButton = document.getElementById('view-button');
+            var tabContainer = document.getElementById('bottom-tab-container');
+
+            if (bottomTabContainer.style.height === '15%') {
+                viewButton.style.transform = 'translateX(-50%) translateY(-100%)';
+            } else {
+                viewButton.style.transform = 'translateX(-50%)';
+            }
+        }
+    </script>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+</body>
+</html>
